@@ -1,3 +1,8 @@
+# Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process ; & ./venv/scripts/activate.ps1 ; Set-ExecutionPolicy -ExecutionPolicy Default -Scope Process
+
+# Folder containing test images:
+test
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
