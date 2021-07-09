@@ -6,24 +6,86 @@ import os
 class Editor(object):
     '''
     '''
-    def __init__(self, samples, positives, negatives):
-        self.samples = samples
-        self.positives = positives
-        self.negatives = negatives
-        print(samples)
-        print(positives)
-        print(negatives)
+    def __init__(self, image, samples, positives, negatives):
+        self.image = cv2.imread(image)
+        self.samples = samples            
+
+        # Convert string indicies to integers for later use
+        integerPositives = []
+        for i in positives:
+            integerPositives.append(int(i))
+
+        # Convert string indicies to integers for later use
+        integerNegatives = []
+        for i in negatives:
+            integerNegatives.append(int(i))
+
+        self.positives = integerPositives
+        self.negatives = integerNegatives
+
+        print(f'\nImage to be analyzed: {image}')
+        print(f'Number of samples in report: {samples}')
+        print(f'Indicies of positive samples: {positives}')
+        print(f'Indicies of negative samples: {negatives}\n')
+
+    def run(self):
+        '''
+        Main algorithm of the class. Given a LightCycler fluorescence report,
+        the method will find the colors of all of the samples and then recolor
+        them either red or black depending on the user's input
+        '''
+        self.colors = self.findSampleColors(self.image)
+
+        negativeColors = []
+        positiveColors = []
+        for i in self.negatives:
+            negativeColors.append(self.colors[i - 1])
+        for i in self.positives:
+            positiveColors.append(self.colors[i - 1])
+
+        for row in range(50, 405):
+            for col in range(267, 961):
+                if list(self.image[row, col]) in negativeColors:
+                    self.image[row, col] = np.array([0, 0, 0])
+                elif list(self.image[row, col]) in positiveColors:
+                    self.image[row, col] = np.array([0, 0, 255])
+        cv2.imwrite('output.png', self.image)
+
+    def findSampleColors(self, image):
+        '''
+        Iterates down the pixels where the sample colors are and
+        saves the RGB pixels that aren't white
+        '''
+        colors = []
+        for i in range(400):
+            color = list(image[50 + i, 140])
+
+            # if the color is not white, save it
+            if color != [255, 255, 255]:
+                colors.append(color)
+        
+        print(f'Number of colors identified in the report: {len(colors)}')
+        return colors
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Edit a LightCycler report image'
     )
-    parser.add_argument('-s', '--samples', type=int, help='Number of samples')
-    parser.add_argument('-p', '--positive', type=list,
+
+    parser.add_argument('-i', '--image', required=True, help='Image file name')
+    parser.add_argument('-s', '--samples', type=int, required=True,
+                    help='Number of samples')
+    parser.add_argument('-p', '--positive', nargs='+', required=True,
                     help='List containing sample #s of positive samples')
-    parser.add_argument('-n', '--negative', type=list,
+    parser.add_argument('-n', '--negative', nargs='+', required=True,
                     help='List containing sample #s of negative samples')
+
     args = parser.parse_args()
-    args_dict = vars(args)
-    print(args_dict)
-    editor = Editor(**args_dict)
+
+    editor = Editor(
+        args.image,
+        args.samples, 
+        args.positive, 
+        args.negative
+        )
+    editor.run()
