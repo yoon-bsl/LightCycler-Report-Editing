@@ -6,15 +6,13 @@ import os
 class Editor(object):
     '''
     '''
-    def __init__(self, image, samples, positives, negatives):
+    def __init__(self, image, positives, negatives):
         self.image = cv2.imread(image)
-        self.samples = samples            
 
         self.positives = [int(i) for i in positives]
         self.negatives = [int(i) for i in negatives]
 
         print(f'\nImage to be analyzed: {image}')
-        print(f'Number of samples in report: {samples}')
         print(f'Indicies of positive samples: {positives}')
         print(f'Indicies of negative samples: {negatives}\n')
 
