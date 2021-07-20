@@ -73,8 +73,6 @@ if __name__ == '__main__':
     )
 
     parser.add_argument('-i', '--image', required=True, help='Image file name')
-    parser.add_argument('-s', '--samples', type=int, required=True,
-                    help='Number of samples')
     parser.add_argument('-p', '--positive', nargs='+', required=True,
                     help='List containing sample #s of positive samples')
     parser.add_argument('-n', '--negative', nargs='+', required=True,
