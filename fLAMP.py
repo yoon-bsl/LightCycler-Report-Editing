@@ -24,12 +24,8 @@ class Editor(object):
         '''
         self.colors = self.findSampleColors(self.image)
 
-        negativeColors = []
-        positiveColors = []
-        for i in self.negatives:
-            negativeColors.append(self.colors[i - 1])
-        for i in self.positives:
-            positiveColors.append(self.colors[i - 1])
+        negativeColors = [self.colors[i - 1] for i in self.negatives]
+        positiveColors = [self.colors[i - 1] for i in self.positives]
 
         for row in range(50, 405):
             for col in range(267, 961):
