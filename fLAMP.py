@@ -10,18 +10,8 @@ class Editor(object):
         self.image = cv2.imread(image)
         self.samples = samples            
 
-        # Convert string indicies to integers for later use
-        integerPositives = []
-        for i in positives:
-            integerPositives.append(int(i))
-
-        # Convert string indicies to integers for later use
-        integerNegatives = []
-        for i in negatives:
-            integerNegatives.append(int(i))
-
-        self.positives = integerPositives
-        self.negatives = integerNegatives
+        self.positives = [int(i) for i in positives]
+        self.negatives = [int(i) for i in negatives]
 
         print(f'\nImage to be analyzed: {image}')
         print(f'Number of samples in report: {samples}')
