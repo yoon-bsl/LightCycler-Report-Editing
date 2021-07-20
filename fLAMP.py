@@ -6,8 +6,10 @@ import os
 class Editor(object):
     '''
     '''
-    def __init__(self, image, positives, negatives):
+    def __init__(self, image, column, positives, negatives):
         self.image = cv2.imread(image)
+
+        self.column = int(column)
 
         self.positives = [int(i) for i in positives]
         self.negatives = [int(i) for i in negatives]
@@ -42,7 +44,7 @@ class Editor(object):
         '''
         colors = []
         for i in range(400):
-            color = list(image[50 + i, 140])
+            color = list(image[50 + i, self.column])
 
             # if the color is not white, save it
             if color != [255, 255, 255]:
@@ -57,6 +59,8 @@ if __name__ == '__main__':
     )
 
     parser.add_argument('-i', '--image', required=True, help='Image file name')
+    parser.add_argument('-c', '--column', required=True,
+                    help='Image column containing sample colors')
     parser.add_argument('-p', '--positive', nargs='+', required=True,
                     help='List containing sample #s of positive samples')
     parser.add_argument('-n', '--negative', nargs='+', required=True,
@@ -66,7 +70,7 @@ if __name__ == '__main__':
 
     editor = Editor(
         args.image,
-        args.samples, 
+        args.column,
         args.positive, 
         args.negative
         )
