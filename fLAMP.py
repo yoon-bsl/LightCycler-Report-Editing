@@ -34,9 +34,9 @@ class Editor(object):
         for row in range(50, 405):
             for col in range(267, 961):
                 if list(self.image[row, col]) in negativeColors:
-                    self.image[row, col] = np.array([0, 0, 0])
+                    self.image[row, col] = np.array([0, 0, 1])
                 elif list(self.image[row, col]) in positiveColors:
-                    self.image[row, col] = np.array([0, 0, 255])
+                    self.image[row, col] = np.array([0, 0, 254])
         cv2.imwrite('output.png', self.image)
 
     def findSampleColors(self, image):
